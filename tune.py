@@ -36,16 +36,10 @@ knn_params = {
     'weights': ['uniform', 'distance'],
     'metric': ['minkowski', 'euclidean', 'manhattan']
 }
+
 rf_params = {
-    'bootstrap': [True],
-    'max_depth': [80, 90, 100, 110],
-    'max_features': [2, 3],
-    'min_samples_leaf': [3, 4, 5],
-    'min_samples_split': [8, 10, 12],
-    'n_estimators': [100, 200, 300, 1000]
-}
-rf2_params = {
     'n_estimator': [1, 2, 4, 8, 16, 32, 64, 100, 200],
+    'max_features': list(range(1, X_train.shape[1])),
     'max_depth': np.linspace(1, 32, 32, endpoint=True),
 }
 svm_params = {'C': [0.1, 1, 10, 100, 1000],
@@ -57,7 +51,7 @@ svm_params = {'C': [0.1, 1, 10, 100, 1000],
 print("# Tuning hyper-parameters for F1 Macro")
 #clf = GridSearchCV(KNeighborsClassifier(),knn_params,scoring='precision_macro',verbose=1,n_jobs=-1)
 #clf = RandomizedSearchCV(KNeighborsClassifier(),knn_params, n_iter=10, scoring=score_func,verbose=1,n_jobs=-1)
-clf = GridSearchCV(SVC(),svm_params, scoring='f1_macro',verbose=3,n_jobs=-1)
+clf = GridSearchCV(SVC(), svm_params, scoring='f1_macro',verbose=3,n_jobs=-1)
 
 clf.fit(X_train, y_train)
 
