@@ -1,12 +1,11 @@
 from time import time
 
+import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn import preprocessing
-from sklearn.metrics import classification_report, f1_score, confusion_matrix
+from sklearn.metrics import classification_report, f1_score, plot_confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
-
-from cm import plot_confusion_matrix
 
 data = pd.read_csv('../connect-4.data')
 
@@ -32,15 +31,17 @@ start_test = time()
 y_pred = baseline_model.predict(x_test)
 stop_test = time()
 
-print("Basline")
+print("Baseline")
 print("Accuracy: %.2f%% Training: %.2fs Testing: %.2fs \n" % (
-f1_score(y_pred, y_test, average='macro') * 100, stop_train - start_train, stop_test - start_test))
+    f1_score(y_pred, y_test, average='macro') * 100, stop_train - start_train, stop_test - start_test))
 print(pd.crosstab(y_test, y_pred, rownames=['True'], colnames=['Predicted'], margins=True))
-print('\nClassification Report:\n', classification_report(y_pred, y_test))
-plot_confusion_matrix(confusion_matrix(y_test, y_pred, ['win', 'loss', 'draw']),
-                      target_names=['win', 'loss', 'draw'],
-                      title='Baseline KNN',
-                      normalize=False)
+print('\nClassification Report:\n', classification_report(y_test, y_pred))
+disp = plot_confusion_matrix(baseline_model, x_test, y_test,
+                             labels=['win', 'loss', 'draw'],
+                             cmap=plt.cm.Blues,
+                             normalize='true')
+disp.ax_.set_title('Baseline KNN')
+plt.show()
 
 start_train = time()
 tuned_model.fit(x_train, y_train)
@@ -52,10 +53,12 @@ stop_test = time()
 
 print("Tuned")
 print("Accuracy: %.2f%% Training: %.2fs Testing: %.2fs \n" % (
-f1_score(y_pred, y_test, average='macro') * 100, stop_train - start_train, stop_test - start_test))
+    f1_score(y_pred, y_test, average='macro') * 100, stop_train - start_train, stop_test - start_test))
 print(pd.crosstab(y_test, y_pred, rownames=['True'], colnames=['Predicted'], margins=True))
 print('\nClassification Report:\n', classification_report(y_pred, y_test))
-plot_confusion_matrix(confusion_matrix(y_test, y_pred, ['win', 'loss', 'draw']),
-                      target_names=['win', 'loss', 'draw'],
-                      title='Optimized KNN',
-                      normalize=False)
+disp = plot_confusion_matrix(tuned_model, x_test, y_test,
+                             labels=['win', 'loss', 'draw'],
+                             cmap=plt.cm.Blues,
+                             normalize='true')
+disp.ax_.set_title('Optimized KNN')
+plt.show()

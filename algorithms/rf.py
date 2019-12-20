@@ -28,7 +28,7 @@ stop_train = time()
 start_test = time()
 y_pred = baseline_model.predict(x_test)
 stop_test = time()
-print("Basline")
+print("Baseline")
 print("Accuracy: %.2f%% Training: %.2fs Testing: %.2fs \n" % (
 f1_score(y_pred, y_test, average='macro') * 100, stop_train - start_train, stop_test - start_test))
 print(pd.crosstab(y_test, y_pred, rownames=['True'], colnames=['Predicted'], margins=True))
@@ -46,7 +46,7 @@ print("Optimized")
 print("Accuracy: %.2f%% Training: %.2fs Testing: %.2fs \n" % (
 f1_score(y_pred, y_test, average='macro') * 100, stop_train - start_train, stop_test - start_test))
 print(pd.crosstab(y_test, y_pred, rownames=['True'], colnames=['Predicted'], margins=True))
-print('\nClassification Report:\n', classification_report(y_pred, y_test))
+print('\nClassification Report:\n', classification_report(y_test, y_pred))
 
 disp = plot_confusion_matrix(tuned_model, x_test, y_test,
                              labels=['win', 'loss', 'draw'],
