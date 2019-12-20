@@ -24,11 +24,11 @@ use_random_forest = 1   # Set to 0 or 1 (determines whether random forest predic
 
 # ==========================================================================
 
-print("Fitting data...")
+print("Loading model...")
 start = time.time()
 
 # Only this line to load the model from file
-loaded_model = pickle.load(open('random_forest_model.sav', 'rb'))
+loaded_model = pickle.load(open('svm_model.sav', 'rb'))
 # Define the possible categories for each feature
 feature_categories = [['b', 'o', 'x'] for i in range(42)]
 # Encoder for encoding the prediction string

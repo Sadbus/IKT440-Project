@@ -19,18 +19,6 @@ x_transformed = enc.fit_transform(x)
 X_train, X_test, y_train, y_test = train_test_split(x_transformed, y, test_size=0.5, random_state=42)
 
 # Set the parameters by cross-validation
-svm_params = [
-    {
-        'kernel': ['rbf'],
-        'gamma': [1e-3, 1e-4],
-        'C': [1, 10, 100, 1000]
-    },
-    {
-        'kernel': ['linear'],
-        'C': [1, 10, 100, 1000]
-    }
-]
-
 knn_params = {
     'n_neighbors': list(range(1, 31)),
     'weights': ['uniform', 'distance'],
@@ -46,12 +34,12 @@ svm_params = {'C': [0.1, 1, 10, 100, 1000],
               'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
               'kernel': ['rbf']}
 
-#score_func = make_scorer(fbeta_score, beta=0.5, pos_label='win')
+# score_func = make_scorer(fbeta_score, beta=0.5, pos_label='win')
 
 print("# Tuning hyper-parameters for F1 Macro")
-#clf = GridSearchCV(KNeighborsClassifier(),knn_params,scoring='precision_macro',verbose=1,n_jobs=-1)
-#clf = RandomizedSearchCV(KNeighborsClassifier(),knn_params, n_iter=10, scoring=score_func,verbose=1,n_jobs=-1)
-clf = GridSearchCV(SVC(), svm_params, scoring='f1_macro',verbose=3,n_jobs=-1)
+# clf = GridSearchCV(KNeighborsClassifier(),knn_params,scoring='precision_macro',verbose=1,n_jobs=-1)
+# clf = RandomizedSearchCV(KNeighborsClassifier(),knn_params, n_iter=10, scoring=score_func,verbose=1,n_jobs=-1)
+clf = GridSearchCV(SVC(), svm_params, scoring='f1_macro', verbose=3, n_jobs=-1)
 
 clf.fit(X_train, y_train)
 
