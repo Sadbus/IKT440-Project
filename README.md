@@ -3,9 +3,9 @@
 This repository contains code developed in the ICT440 project in the fall of 2019. The assignment was to compare different machine learning algorithms on the Connect-4 data set and create an AI player for the game.
 
 ## Getting started
-In order to run the game, MCTS.py, the machine learning model must first be trained and exported to a file. Run the "export_rf_model.py" script to save the trained random forest model to file, before running MCTS.py
+In order to run the game, MCTS.py, the machine learning model must first be trained and exported to a file. Run the "export_rf_model.py" script to save the trained random forest model to file, before running MCTS.py. The model to laod can be changed on line 31 in MCTS.py.
 
-
+Please note that saving the SVM model to files takes approximatley 80 minutes. _probability_ is set to _true_ in order for MCTS.py to use _predict_proba()_. Thus, the fit method performs an extra 5 crossfolds on the training data.
 ## Contents of the repository
 
 This repository contains the scripts used to generate results for the report, a script to tune hyper-parameters of the different algorithms and the Connect Four game with an AI opponent using a random forest model trained on the Connect-4 data set.
