@@ -3,7 +3,7 @@
 This repository contains code developed in the ICT440 project in the fall of 2019. The assignment was to compare different machine learning algorithms on the Connect-4 data set and create an AI player for the game.
 
 ## Getting started
-In order to run the game, MCTS.py, the machine learning model must first be trained and exportet to a file. Run the "export_rf_model.py" script to save the trained random forest model to file, before running MCTS.py
+In order to run the game, MCTS.py, the machine learning model must first be trained and exported to a file. Run the "export_rf_model.py" script to save the trained random forest model to file, before running MCTS.py
 
 
 ## Contents of the repository
