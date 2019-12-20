@@ -1,4 +1,6 @@
 from time import time
+
+import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 from sklearn.model_selection import train_test_split
@@ -28,3 +30,4 @@ stop_test = time()
 print("Accuracy: %.2f%% Training: %.2fs Testing: %.2fs" % (accuracy_score(y_pred, y_test)*100, stop_train - start_train, stop_test - start_test))
 print("\nConfusion Matrix:\n", confusion_matrix(y_pred, y_test))
 print('\nClassification Report:\n', classification_report(y_pred, y_test))
+

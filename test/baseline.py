@@ -1,40 +1,21 @@
-import numpy as np
 import pandas as pd
 from time import time
 import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.metrics import confusion_matrix, classification_report, f1_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, f1_score, plot_confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing, svm
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 
 
-def plot_confusion_matrix(y_test, y_pred, title):
-    cm = confusion_matrix(y_test, y_pred, ['win', 'loss', 'draw'])
-    cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    cax = ax.matshow(cm)
-    plt.title(title)
-    fig.colorbar(cax)
-    ax.set_xticklabels([''] + ['win', 'loss', 'draw'])
-    ax.set_yticklabels([''] + ['win', 'loss', 'draw'])
-
-    # Loop over data dimensions and create text annotations.
-    fmt = '.2f'
-    thresh = cm.max() / 2.
-    for i in range(cm.shape[0]):
-        for j in range(cm.shape[1]):
-            ax.text(j, i, format(cm[i, j], fmt),
-                    ha="center", va="center",
-                    color="white" if cm[i, j] < thresh else "black")
-    fig.tight_layout()
-
-    plt.xlabel('Predicted')
-    plt.ylabel('True')
+def plot(model, x_test, y_test, title):
+    disp = plot_confusion_matrix(model, x_test, y_test,
+                                 labels=['win', 'loss', 'draw'],
+                                 cmap=plt.cm.Blues,
+                                 normalize='true')
+    disp.ax_.set_title(title + 'normalized true')
     plt.show()
 
 
@@ -71,7 +52,7 @@ print("F1 Score: %.2f%% Training: %.2fs Testing: %.2fs" % (f1_score(y_pred, y_te
                                                            stop_train - start_train,
                                                            stop_test - start_test))
 print('Classification Report:\n', classification_report(y_pred, y_test))
-plot_confusion_matrix(y_test, y_pred, "KNN Baseline (" +  str(f1_score(y_pred, y_test, average='macro')*100) + "%)")
+plot(KNN, x_test, y_test, "Baseline: K-Nearest Neighbors")
 
 
 #
@@ -93,7 +74,7 @@ print("F1 Score: %.2f%% Training: %.2fs Testing: %.2fs" % (f1_score(y_pred, y_te
                                                            stop_train - start_train,
                                                            stop_test - start_test))
 print('Classification Report:\n', classification_report(y_pred, y_test))
-plot_confusion_matrix(y_test, y_pred, "GNB Baseline (" +  str(f1_score(y_pred, y_test, average='macro')*100) + "%)")
+plot(gnb, x_test.toarray(), y_test, "Baseline: Gaussian Naive Bayes")
 
 
 #
@@ -114,34 +95,11 @@ print("F1 Score: %.2f%% Training: %.2fs Testing: %.2fs" % (f1_score(y_pred, y_te
                                                            stop_train - start_train,
                                                            stop_test - start_test))
 print('Classification Report:\n', classification_report(y_pred, y_test))
-plot_confusion_matrix(y_test, y_pred, "Random Fores Baseline (" +  str(f1_score(y_pred, y_test, average='macro')*100) + "%)")
+plot(rf, x_test, y_test, "Baseline: Random Forest")
 
-
-#
-# Linear Regression
-#
-lr = LinearRegression(n_jobs=-1)
-
-start_train = time()
-lr.fit(x_train, y_train)
-stop_train = time()
-
-start_test = time()
-y_pred = lr.predict(x_test)
-stop_test = time()
-
-print("\nRandom Forest")
-print("F1 Score: %.2f%% Training: %.2fs Testing: %.2fs" % (f1_score(y_pred, y_test, average='macro')*100,
-                                                           stop_train - start_train,
-                                                           stop_test - start_test))
-print('Classification Report:\n', classification_report(y_pred, y_test))
-plot_confusion_matrix(y_test, y_pred, "Linear Regression Baseline (" +  str(f1_score(y_pred, y_test, average='macro')*100) + "%)")
-
-
-#
 # Logistic Regression
 #
-lr = LogisticRegression(n_jobs=-1, random_state=42)
+lr = LogisticRegression(max_iter=5000, n_jobs=-1, random_state=42)
 
 start_train = time()
 lr.fit(x_train, y_train)
@@ -151,12 +109,12 @@ start_test = time()
 y_pred = lr.predict(x_test)
 stop_test = time()
 
-print("\nRandom Forest")
+print("\nLogistic Regression")
 print("F1 Score: %.2f%% Training: %.2fs Testing: %.2fs" % (f1_score(y_pred, y_test, average='macro')*100,
                                                            stop_train - start_train,
                                                            stop_test - start_test))
 print('Classification Report:\n', classification_report(y_pred, y_test))
-plot_confusion_matrix(y_test, y_pred, "Logistic Regression Baseline (" +  str(f1_score(y_pred, y_test, average='macro')*100) + "%)")
+plot(lr, x_test, y_test, "Baseline: Logistic Regression")
 
 
 #
@@ -177,7 +135,7 @@ print("F1 Score: %.2f%% Training: %.2fs Testing: %.2fs" % (f1_score(y_pred, y_te
                                                            stop_train - start_train,
                                                            stop_test - start_test))
 print('Classification Report:\n', classification_report(y_pred, y_test))
-plot_confusion_matrix(y_test, y_pred, "Linear SVC Baseline (" +  str(f1_score(y_pred, y_test, average='macro')*100) + "%)")
+plot(lin_SVC, x_test, y_test, "Baseline: Linear SVM")
 
 
 #
@@ -198,5 +156,5 @@ print("F1 Score: %.2f%% Training: %.2fs Testing: %.2fs" % (f1_score(y_pred, y_te
                                                            stop_train - start_train,
                                                            stop_test - start_test))
 print('Classification Report:\n', classification_report(y_pred, y_test))
-plot_confusion_matrix(y_test, y_pred, "SVC Baseline (" +  str(f1_score(y_pred, y_test, average='macro')*100) + "%)")
+plot(SVC, x_test, y_test, "Baseline: SVM")
 
