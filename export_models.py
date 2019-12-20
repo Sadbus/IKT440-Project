@@ -32,14 +32,15 @@ svm = svm.SVC(decision_function_shape='ovo',
 print("Fitting RF model ...")
 rf.fit(x_train, y_train)
 
-print("Fitting SVM model ...")
-svm.fit(x_train, y_train)
-
-print("Saving models to file ...")
+print("Saving RF model to file ...")
 filename = 'random_forest_model.sav'
 pickle.dump(rf, open(filename, 'wb'))
 
-filename = 'svm_model.sav'
-pickle.dump(svm, open(filename, 'wb'))
+# print("Fitting SVM model ...")
+# svm.fit(x_train, y_train)
+#
+# print("Saving SVM model to file ...")
+# filename = 'svm_model.sav'
+# pickle.dump(svm, open(filename, 'wb'))
 
 print("Finished.")
