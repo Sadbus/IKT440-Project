@@ -1,14 +1,10 @@
 import numpy as np
 import pandas as pd
-from sklearn import datasets
-from sklearn.model_selection import train_test_split, RandomizedSearchCV
+from sklearn.metrics import classification_report
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import classification_report, make_scorer, fbeta_score
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.svm import SVC
-
-print(__doc__)
 
 # Loading the data set
 data = pd.read_csv('connect-4.data')
@@ -40,7 +36,6 @@ knn_params = {
     'weights': ['uniform', 'distance'],
     'metric': ['minkowski', 'euclidean', 'manhattan']
 }
-
 rf_params = {
     'bootstrap': [True],
     'max_depth': [80, 90, 100, 110],
@@ -49,18 +44,20 @@ rf_params = {
     'min_samples_split': [8, 10, 12],
     'n_estimators': [100, 200, 300, 1000]
 }
-
 rf2_params = {
     'n_estimator': [1, 2, 4, 8, 16, 32, 64, 100, 200],
     'max_depth': np.linspace(1, 32, 32, endpoint=True),
-
 }
+svm_params = {'C': [0.1, 1, 10, 100, 1000],
+              'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
+              'kernel': ['rbf']}
 
 #score_func = make_scorer(fbeta_score, beta=0.5, pos_label='win')
 
 print("# Tuning hyper-parameters for F1 Macro")
-clf = GridSearchCV(KNeighborsClassifier(),knn_params,scoring='precision_macro',verbose=1,n_jobs=-1)
+#clf = GridSearchCV(KNeighborsClassifier(),knn_params,scoring='precision_macro',verbose=1,n_jobs=-1)
 #clf = RandomizedSearchCV(KNeighborsClassifier(),knn_params, n_iter=10, scoring=score_func,verbose=1,n_jobs=-1)
+clf = GridSearchCV(SVC(),svm_params, scoring='f1_macro',verbose=3,n_jobs=-1)
 
 clf.fit(X_train, y_train)
 
